@@ -4,6 +4,7 @@ const winningMessageTextElement = document.querySelector(
   "[data-winning-message-text]"
 );
 const winningMessageElement = document.querySelector("[data-winning-message]");
+const restartButton = document.querySelector("[data-restart-button]");
 
 let isCircleTurn;
 
@@ -19,12 +20,17 @@ const winningCombinations = [
 ];
 
 const startGame = () => {
+  isCircleTurn = false;
+
   for (const cell of cellElements) {
+    cell.classList.remove("circle");
+    cell.classList.remove("x");
+    cell.removeEventListener("click", handleClick);
     cell.addEventListener("click", handleClick, { once: true });
   }
 
-  isCircleTurn = false;
-  board.classList.add("x");
+  setBoardHoverClass();
+  winningMessageElement.classList.remove("show-winning-message");
 };
 
 const endGame = (isDraw) => {
@@ -50,9 +56,7 @@ const placeMark = (cell, classToAdd) => {
   cell.classList.add(classToAdd);
 };
 
-const swapTurns = () => {
-  isCircleTurn = !isCircleTurn;
-
+const setBoardHoverClass = () => {
   board.classList.remove("circle");
   board.classList.remove("x");
 
@@ -61,6 +65,12 @@ const swapTurns = () => {
   } else {
     board.classList.add("x");
   }
+};
+
+const swapTurns = () => {
+  isCircleTurn = !isCircleTurn;
+
+  setBoardHoverClass();
 };
 
 function handleClick(e) {
@@ -82,3 +92,5 @@ function handleClick(e) {
 }
 
 startGame();
+
+restartButton.addEventListener("click", startGame);
